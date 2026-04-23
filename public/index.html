@@ -377,6 +377,84 @@
   }
   .modal-actions { display: flex; gap: 16px; margin-top: auto; }
 
+  /* ── WATCH PROVIDERS ── */
+  .providers-section { margin-bottom: 24px; }
+  .providers-label { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+  .providers-list { display: flex; flex-wrap: wrap; gap: 10px; }
+  .provider-chip {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 16px 8px 8px; border-radius: 12px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-primary); font-size: 13px; font-weight: 600;
+    text-decoration: none; transition: var(--transition); cursor: pointer;
+  }
+  .provider-chip:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .provider-chip img { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
+  .provider-chip .provider-name { white-space: nowrap; }
+
+  /* ── SEASONS ACCORDION ── */
+  .seasons-section { margin-bottom: 24px; }
+  .seasons-label { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+  .season-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; margin-bottom: 8px; overflow: hidden;
+    transition: var(--transition);
+  }
+  .season-card:hover { border-color: rgba(255,255,255,0.15); }
+  .season-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; cursor: pointer; user-select: none;
+    transition: var(--transition);
+  }
+  .season-header:hover { background: rgba(255,255,255,0.04); }
+  .season-header-left { display: flex; align-items: center; gap: 12px; }
+  .season-number {
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    color: white; font-size: 12px; font-weight: 800;
+    padding: 4px 10px; border-radius: 6px; min-width: 36px; text-align: center;
+  }
+  .season-title { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+  .season-ep-count { font-size: 12px; color: var(--text-secondary); margin-left: 4px; }
+  .season-rating {
+    font-size: 13px; color: #ffd700; font-weight: 600;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .season-chevron {
+    font-size: 14px; color: var(--text-muted);
+    transition: transform 0.3s ease; display: inline-block;
+  }
+  .season-card.open .season-chevron { transform: rotate(180deg); }
+  .season-episodes {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .season-card.open .season-episodes { max-height: 10000px; }
+  .episodes-list { padding: 0 18px 14px; max-height: 400px; overflow-y: auto; }
+  .episodes-list::-webkit-scrollbar { width: 5px; }
+  .episodes-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+  .episodes-list::-webkit-scrollbar-track { background: transparent; }
+  .episode-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: var(--transition);
+  }
+  .episode-row:last-child { border-bottom: none; }
+  .episode-row:hover { background: rgba(255,255,255,0.02); margin: 0 -8px; padding: 10px 8px; border-radius: 8px; }
+  .ep-num {
+    color: var(--text-muted); font-size: 13px; font-weight: 700;
+    min-width: 32px; text-align: center;
+  }
+  .ep-info { flex: 1; min-width: 0; }
+  .ep-title { font-size: 14px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ep-date { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .ep-rating {
+    font-size: 13px; font-weight: 600; color: #ffd700;
+    display: flex; align-items: center; gap: 3px;
+    background: rgba(255, 215, 0, 0.08); padding: 3px 8px; border-radius: 6px;
+    white-space: nowrap;
+  }
+  .ep-loading { padding: 20px; text-align: center; color: var(--text-muted); font-size: 13px; }
+
   /* ── TRAILER MODAL ── */
   #trailer-modal-inner {
     background: #000; padding: 0; max-width: 1000px; width: 95%; aspect-ratio: 16/9; 
@@ -599,6 +677,14 @@
         <div class="modal-cast-container">
           <span class="modal-cast-label">Top Cast</span>
           <div class="modal-cast" id="m-cast"></div>
+        </div>
+        <div class="providers-section" id="m-providers-section" style="display:none">
+          <span class="providers-label">📡 Where to Watch</span>
+          <div class="providers-list" id="m-providers"></div>
+        </div>
+        <div class="seasons-section" id="m-seasons-section" style="display:none">
+          <span class="seasons-label">📺 Seasons & Episodes</span>
+          <div id="m-seasons"></div>
         </div>
         <div class="modal-actions">
           <button class="btn-primary" id="m-trailer-btn"><span>▶</span> Watch Trailer</button>
@@ -882,6 +968,145 @@ function renderGrid(){
   });
 }
 
+// ── Provider URL mapping ──
+const PROVIDER_URLS = {
+  'Netflix':         'https://www.netflix.com',
+  'Amazon Prime Video': 'https://www.primevideo.com',
+  'Disney Plus':     'https://www.disneyplus.com',
+  'Disney+ Hotstar': 'https://www.hotstar.com',
+  'JioCinema':       'https://www.jiocinema.com',
+  'Hotstar':         'https://www.hotstar.com',
+  'Zee5':            'https://www.zee5.com',
+  'SonyLIV':         'https://www.sonyliv.com',
+  'Voot':            'https://www.voot.com',
+  'MX Player':       'https://www.mxplayer.in',
+  'Apple TV Plus':   'https://tv.apple.com',
+  'Hulu':            'https://www.hulu.com',
+  'HBO Max':         'https://www.max.com',
+  'Crunchyroll':     'https://www.crunchyroll.com',
+  'Funimation':      'https://www.funimation.com',
+  'Paramount Plus':  'https://www.paramountplus.com',
+  'Peacock':         'https://www.peacocktv.com',
+  'Lionsgate Play':  'https://www.lionsgateplay.com',
+  'Aha':             'https://www.aha.video',
+  'Sun NXT':         'https://www.sunnxt.com',
+  'Mubi':            'https://mubi.com',
+};
+
+function renderProviders(watchProviders) {
+  const section = document.getElementById('m-providers-section');
+  const container = document.getElementById('m-providers');
+  container.innerHTML = '';
+
+  if (!watchProviders || !watchProviders.results) { section.style.display = 'none'; return; }
+
+  // Prioritize IN (India), fall back to US, then first available
+  const regionData = watchProviders.results['IN'] || watchProviders.results['US'] || Object.values(watchProviders.results)[0];
+  if (!regionData) { section.style.display = 'none'; return; }
+
+  // Combine flatrate (subscription) + free + ads providers
+  const providers = [
+    ...(regionData.flatrate || []),
+    ...(regionData.free || []),
+    ...(regionData.ads || []),
+  ];
+
+  // Deduplicate by provider_id
+  const seen = new Set();
+  const unique = providers.filter(p => { if (seen.has(p.provider_id)) return false; seen.add(p.provider_id); return true; });
+
+  if (unique.length === 0) { section.style.display = 'none'; return; }
+
+  section.style.display = '';
+  unique.forEach(p => {
+    const url = PROVIDER_URLS[p.provider_name] || regionData.link || '#';
+    const logoUrl = p.logo_path ? `https://wsrv.nl/?url=image.tmdb.org/t/p/w92${p.logo_path}&output=webp` : '';
+    const chip = document.createElement('a');
+    chip.className = 'provider-chip';
+    chip.href = url;
+    chip.target = '_blank';
+    chip.rel = 'noopener noreferrer';
+    chip.innerHTML = `
+      ${logoUrl ? `<img src="${logoUrl}" alt="${p.provider_name}">` : ''}
+      <span class="provider-name">${p.provider_name}</span>
+    `;
+    container.appendChild(chip);
+  });
+}
+
+function renderSeasons(seasons, tvId) {
+  const section = document.getElementById('m-seasons-section');
+  const container = document.getElementById('m-seasons');
+  container.innerHTML = '';
+
+  if (!seasons || seasons.length === 0) { section.style.display = 'none'; return; }
+
+  // Filter out "Specials" (season 0) unless it's the only one
+  const filteredSeasons = seasons.length > 1 ? seasons.filter(s => s.season_number > 0) : seasons;
+  if (filteredSeasons.length === 0) { section.style.display = 'none'; return; }
+
+  section.style.display = '';
+  filteredSeasons.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'season-card';
+    const ratingDisplay = s.vote_average ? `<span class="season-rating">★ ${s.vote_average.toFixed(1)}</span>` : '';
+    card.innerHTML = `
+      <div class="season-header">
+        <div class="season-header-left">
+          <span class="season-number">S${s.season_number}</span>
+          <span class="season-title">${s.name || 'Season ' + s.season_number}</span>
+          <span class="season-ep-count">(${s.episode_count} eps)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          ${ratingDisplay}
+          <span class="season-chevron">▼</span>
+        </div>
+      </div>
+      <div class="season-episodes">
+        <div class="episodes-list" id="eps-${tvId}-${s.season_number}">
+          <div class="ep-loading">Click to load episodes...</div>
+        </div>
+      </div>
+    `;
+    let loaded = false;
+    card.querySelector('.season-header').addEventListener('click', async () => {
+      card.classList.toggle('open');
+      if (!loaded && card.classList.contains('open')) {
+        loaded = true;
+        const epContainer = document.getElementById(`eps-${tvId}-${s.season_number}`);
+        epContainer.innerHTML = '<div class="ep-loading">Loading episodes...</div>';
+        try {
+          const res = await fetch(`${API}/tv/${tvId}/season/${s.season_number}`);
+          if (!res.ok) throw new Error('Failed');
+          const data = await res.json();
+          const episodes = data.episodes || [];
+          if (episodes.length === 0) {
+            epContainer.innerHTML = '<div class="ep-loading">No episodes found.</div>';
+            return;
+          }
+          epContainer.innerHTML = episodes.map(ep => {
+            const epRating = ep.vote_average ? ep.vote_average.toFixed(1) : '—';
+            const epAir = ep.air_date || '';
+            return `
+              <div class="episode-row">
+                <span class="ep-num">E${ep.episode_number}</span>
+                <div class="ep-info">
+                  <div class="ep-title" title="${(ep.name || '').replace(/"/g, '&quot;')}">${ep.name || 'Episode ' + ep.episode_number}</div>
+                  ${epAir ? `<div class="ep-date">${epAir}</div>` : ''}
+                </div>
+                <span class="ep-rating">★ ${epRating}</span>
+              </div>
+            `;
+          }).join('');
+        } catch {
+          epContainer.innerHTML = '<div class="ep-loading">Failed to load episodes.</div>';
+        }
+      }
+    });
+    container.appendChild(card);
+  });
+}
+
 function openModal(item){
   const title = item.title || item.name || "Untitled";
   const date = (item.release_date || item.first_air_date || "").slice(0,4) || "—";
@@ -893,6 +1118,12 @@ function openModal(item){
   document.getElementById("m-desc").textContent = item.overview || "No plot description available for this title.";
   
   const mType = item.title ? "movie" : "tv";
+  
+  // Reset providers and seasons sections
+  document.getElementById('m-providers-section').style.display = 'none';
+  document.getElementById('m-seasons-section').style.display = 'none';
+  document.getElementById('m-providers').innerHTML = '';
+  document.getElementById('m-seasons').innerHTML = '';
   
   const mCast = document.getElementById("m-cast");
   mCast.innerHTML = `<span style="color: var(--text-secondary); font-size: 14px;">Loading cast...</span>`;
@@ -909,6 +1140,16 @@ function openModal(item){
         `).join('');
       } else {
         mCast.innerHTML = `<span style="color: var(--text-secondary); font-size: 14px;">No cast information available.</span>`;
+      }
+      
+      // Render watch providers (TV shows only)
+      if (mType === 'tv' && data['watch/providers']) {
+        renderProviders(data['watch/providers']);
+      }
+      
+      // Render seasons (TV shows only)
+      if (mType === 'tv' && data.seasons) {
+        renderSeasons(data.seasons, item.id);
       }
     })
     .catch(() => {

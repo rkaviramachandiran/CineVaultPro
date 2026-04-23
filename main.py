@@ -211,7 +211,13 @@ async def movie_detail(movie_id: int):
 
 @app.get("/api/tv/{tv_id}", tags=["Detail"])
 async def tv_detail(tv_id: int):
-    return await tmdb_get(f"/tv/{tv_id}", {"append_to_response": "credits"})
+    return await tmdb_get(f"/tv/{tv_id}", {"append_to_response": "credits,watch/providers"})
+
+
+@app.get("/api/tv/{tv_id}/season/{season_number}", tags=["Detail"])
+async def tv_season_detail(tv_id: int, season_number: int):
+    """Return full season details including all episodes with ratings."""
+    return await tmdb_get(f"/tv/{tv_id}/season/{season_number}", {})
 
 
 # ── Trailers ──────────────────────────────────────────────────────────────────
