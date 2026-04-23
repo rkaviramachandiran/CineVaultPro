@@ -4,6 +4,8 @@ A Python/FastAPI backend that proxies TMDB API calls server-side, keeping your A
 
 > **Note:** I am using my full project in Antigravity IDE with AI.
 
+![CineVault Pro Screenshot](screenshot.png)
+
 ---
 
 ## Project Structure
