@@ -19,6 +19,7 @@ if not TMDB_KEY:
 
 TMDB_BASE = "https://api.tmdb.org/3"
 WEB_NETWORKS = "213|1024|453|2739|2552|49|3353"   # Netflix, Prime, Disney+, etc.
+INDIAN_NETWORKS = "213|1024|2739|2120|2542|2533|4124|2603|2734|4543" # Netflix, Prime, Hotstar, Zee5, SonyLIV, Jio, Aha, SunNXT, AltBalaji, MXPlayer
 
 # ── App ───────────────────────────────────────────────────────────────────────
 app = FastAPI(
@@ -130,6 +131,7 @@ async def anime_discover(
         "with_original_language": "ja",
         "vote_count.gte": 20,
         "include_adult": "false",
+        "without_keywords": "180547,11090,12361", # Exclude ecchi, sexual content, nudity
     })
 
 
@@ -203,10 +205,83 @@ async def webseries_search(
     })
 
 
+# ── Indian Webseries ──────────────────────────────────────────────────────────
+@app.get("/api/indian/discover", tags=["Indian"])
+async def indian_discover(
+    sort_by: str = Query("popularity.desc"),
+    page: int = Query(1, ge=1),
+    with_genres: Optional[str] = None,
+):
+    # Using specific Indian networks to filter out daily soaps/serials
+    return await tmdb_get("/discover/tv", {
+        "sort_by": sort_by,
+        "page": page,
+        "with_genres": with_genres,
+        "with_networks": INDIAN_NETWORKS,
+        "with_origin_country": "IN",
+        "vote_count.gte": 5,
+        "include_adult": "false",
+    })
+
+
+@app.get("/api/indian/search", tags=["Indian"])
+async def indian_search(
+    query: str = Query(..., min_length=1),
+    page: int = Query(1, ge=1),
+):
+    return await tmdb_get("/search/tv", {
+        "query": query,
+        "page": page,
+        "include_adult": "false",
+    })
+
+
+# ── Platform Discovery ────────────────────────────────────────────────────────
+@app.get("/api/platform/{provider_id}", tags=["Platform"])
+async def platform_discover(
+    provider_id: int,
+    page: int = Query(1, ge=1),
+    sort_by: str = Query("popularity.desc"),
+):
+    """Fetch both movies and TV shows for a specific watch provider in India."""
+    # Note: TMDB discover for providers requires watch_region
+    params = {
+        "sort_by": sort_by,
+        "page": page,
+        "with_watch_providers": provider_id,
+        "watch_region": "IN",
+        "include_adult": "false",
+    }
+    
+    try:
+        movies = await tmdb_get("/discover/movie", params)
+        tvs = await tmdb_get("/discover/tv", params)
+        
+        # Mark items so frontend knows their type
+        movie_results = movies.get("results", [])
+        for m in movie_results: m["media_type"] = "movie"
+        
+        tv_results = tvs.get("results", [])
+        for t in tv_results: t["media_type"] = "tv"
+        
+        # Merge and sort by popularity
+        results = movie_results + tv_results
+        results.sort(key=lambda x: x.get("popularity", 0), reverse=True)
+        
+        return {
+            "page": page,
+            "results": results,
+            "total_pages": min(movies.get("total_pages", 500), tvs.get("total_pages", 500)),
+            "total_results": (movies.get("total_results", 0) + tvs.get("total_results", 0))
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 # ── Detail pages ──────────────────────────────────────────────────────────────
 @app.get("/api/movie/{movie_id}", tags=["Detail"])
 async def movie_detail(movie_id: int):
-    return await tmdb_get(f"/movie/{movie_id}", {"append_to_response": "credits"})
+    return await tmdb_get(f"/movie/{movie_id}", {"append_to_response": "credits,watch/providers"})
 
 
 @app.get("/api/tv/{tv_id}", tags=["Detail"])
