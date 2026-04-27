@@ -1,0 +1,97 @@
+[
+  {
+    "name": "Netflix",
+    "id": 8,
+    "logo": "/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg"
+  },
+  {
+    "name": "Amazon Prime Video",
+    "id": 119,
+    "logo": "/pvske1MyAoymrs5bguRfVqYiM9a.jpg"
+  },
+  {
+    "name": "Apple TV",
+    "id": 350,
+    "logo": "/mcbz1LgtErU9p4UdbZ0rG6RTWHX.jpg"
+  },
+  {
+    "name": "JioHotstar",
+    "id": 2336,
+    "logo": "/kVqjgpcwvDJOhCupjcLzwwtOp52.jpg"
+  },
+  {
+    "name": "Apple TV Store",
+    "id": 2,
+    "logo": "/SPnB1qiCkYfirS2it3hZORwGVn.jpg"
+  },
+  {
+    "name": "Crunchyroll",
+    "id": 283,
+    "logo": "/fzN5Jok5Ig1eJ7gyNGoMhnLSCfh.jpg"
+  },
+  {
+    "name": "Zee5",
+    "id": 232,
+    "logo": "/gP67NRy1ShUJilrzMsbOmEmdmcv.jpg"
+  },
+  {
+    "name": "Netflix Kids",
+    "id": 175,
+    "logo": "/kwVegvKCinXTPuzZmYT1J3i1HJz.jpg"
+  },
+  {
+    "name": "ManoramaMax",
+    "id": 482,
+    "logo": "/tFkqZYsDhNe6hJCx50Aw6oma24w.jpg"
+  },
+  {
+    "name": "aha",
+    "id": 532,
+    "logo": "/8WerMI8XcZXqPpkHTZNtzMzousF.jpg"
+  },
+  {
+    "name": "Lionsgate Play",
+    "id": 561,
+    "logo": "/e2hCUg2Z3sJ6yWF9NLU24SIKeWa.jpg"
+  },
+  {
+    "name": "Lionsgate Play Apple TV Channel",
+    "id": 2053,
+    "logo": "/p8i1zUcZYQ7qU6RrGvGbDItvcx4.jpg"
+  },
+  {
+    "name": "Eros Now Select Apple TV Channel",
+    "id": 2059,
+    "logo": "/cqgeSQHqKEkfcmsiy7GoCnf1Q2I.jpg"
+  },
+  {
+    "name": "Lionsgate Play Amazon Channel",
+    "id": 2074,
+    "logo": "/yVbjPWEbsStanRAxwKMDARVOvsn.jpg"
+  },
+  {
+    "name": "Crunchyroll Amazon Channel",
+    "id": 1968,
+    "logo": "/pgjz7bzfBq4nFDu8JJDLBoUVAX8.jpg"
+  },
+  {
+    "name": "ManoramaMAX Amazon Channel",
+    "id": 2177,
+    "logo": "/fY2J5CojsKC52LO2K8P5AQAH2UT.jpg"
+  },
+  {
+    "name": "Apple TV Amazon Channel",
+    "id": 2243,
+    "logo": "/mHrYMgnZIp6lgW2aXg7ix9zGOnA.jpg"
+  },
+  {
+    "name": "Amazon Prime Video with Ads",
+    "id": 2100,
+    "logo": "/8aBqoNeGGr0oSA85iopgNZUOTOc.jpg"
+  },
+  {
+    "name": "Animax Amazon Channel",
+    "id": 2613,
+    "logo": "/8ms2NcDEuYi6cfFpRLPiU7aOIqs.jpg"
+  }
+]

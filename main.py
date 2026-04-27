@@ -1,6 +1,7 @@
 import os
-from datetime import datetime, timezone
-from typing import Optional
+import json
+from datetime import datetime, timezone, timedelta
+from typing import Optional, List
 
 import httpx
 from fastapi import FastAPI, HTTPException, Query
@@ -16,11 +17,9 @@ load_dotenv()
 TMDB_KEY  = os.getenv("TMDB_API_KEY")
 if not TMDB_KEY:
     raise ValueError("Missing TMDB_API_KEY in environment variables.")
-
 TMDB_BASE = "https://api.tmdb.org/3"
 WEB_NETWORKS = "213|1024|453|2739|2552|49|3353"   # Netflix, Prime, Disney+, etc.
 INDIAN_NETWORKS = "213|1024|2739|2120|2542|2533|4124|2603|2734|4543" # Netflix, Prime, Hotstar, Zee5, SonyLIV, Jio, Aha, SunNXT, AltBalaji, MXPlayer
-
 # ── App ───────────────────────────────────────────────────────────────────────
 app = FastAPI(
     title="CineVault API",
@@ -54,7 +53,6 @@ async def tmdb_get(path: str, params: dict) -> dict:
 async def health():
     return {"status": "ok", "timestamp": datetime.now(timezone.utc).isoformat()}
 
-
 # ── Movies ────────────────────────────────────────────────────────────────────
 @app.get("/api/movies/discover", tags=["Movies"])
 async def movies_discover(
@@ -66,7 +64,6 @@ async def movies_discover(
         "sort_by": sort_by,
         "page": page,
         "with_genres": with_genres,
-        "vote_count.gte": 50,
         "include_adult": "false",
     })
 
@@ -94,7 +91,6 @@ async def series_discover(
         "sort_by": sort_by,
         "page": page,
         "with_genres": with_genres,
-        "vote_count.gte": 20,
         "include_adult": "false",
     })
 
@@ -129,7 +125,6 @@ async def anime_discover(
         "page": page,
         "with_genres": genre_param,
         "with_original_language": "ja",
-        "vote_count.gte": 20,
         "include_adult": "false",
         "without_keywords": "180547,11090,12361", # Exclude ecchi, sexual content, nudity
     })
@@ -159,7 +154,6 @@ async def tamil_discover(
         "page": page,
         "with_genres": with_genres,
         "with_original_language": "ta",
-        "vote_count.gte": 5,
         "include_adult": "false",
     })
 
@@ -188,7 +182,6 @@ async def webseries_discover(
         "page": page,
         "with_genres": with_genres,
         "with_networks": WEB_NETWORKS,
-        "vote_count.gte": 20,
         "include_adult": "false",
     })
 
@@ -219,7 +212,6 @@ async def indian_discover(
         "with_genres": with_genres,
         "with_networks": INDIAN_NETWORKS,
         "with_origin_country": "IN",
-        "vote_count.gte": 5,
         "include_adult": "false",
     })
 
@@ -234,6 +226,36 @@ async def indian_search(
         "page": page,
         "include_adult": "false",
     })
+
+
+# ── Regional Cinema (Hindi, Telugu, Malayalam, Kannada) ──────────────────────
+@app.get("/api/hindi/discover", tags=["Regional"])
+async def hindi_discover(sort_by: str = Query("popularity.desc"), page: int = Query(1, ge=1), with_genres: Optional[str] = None):
+    return await tmdb_get("/discover/movie", {"sort_by": sort_by, "page": page, "with_genres": with_genres, "with_original_language": "hi", "include_adult": "false"})
+
+@app.get("/api/telugu/discover", tags=["Regional"])
+async def telugu_discover(sort_by: str = Query("popularity.desc"), page: int = Query(1, ge=1), with_genres: Optional[str] = None):
+    return await tmdb_get("/discover/movie", {"sort_by": sort_by, "page": page, "with_genres": with_genres, "with_original_language": "te", "include_adult": "false"})
+
+@app.get("/api/malayalam/discover", tags=["Regional"])
+async def malayalam_discover(sort_by: str = Query("popularity.desc"), page: int = Query(1, ge=1), with_genres: Optional[str] = None):
+    return await tmdb_get("/discover/movie", {"sort_by": sort_by, "page": page, "with_genres": with_genres, "with_original_language": "ml", "include_adult": "false"})
+
+@app.get("/api/kannada/discover", tags=["Regional"])
+async def kannada_discover(sort_by: str = Query("popularity.desc"), page: int = Query(1, ge=1), with_genres: Optional[str] = None):
+    return await tmdb_get("/discover/movie", {"sort_by": sort_by, "page": page, "with_genres": with_genres, "with_original_language": "kn", "include_adult": "false"})
+
+
+# ── International (Korean/K-Drama, Hollywood) ───────────────────────────────
+@app.get("/api/korean/discover", tags=["International"])
+async def korean_discover(sort_by: str = Query("popularity.desc"), page: int = Query(1, ge=1), with_genres: Optional[str] = None):
+    # Discovery for Korean TV shows (K-Dramas)
+    return await tmdb_get("/discover/tv", {"sort_by": sort_by, "page": page, "with_genres": with_genres, "with_original_language": "ko", "include_adult": "false"})
+
+@app.get("/api/hollywood/discover", tags=["International"])
+async def hollywood_discover(sort_by: str = Query("popularity.desc"), page: int = Query(1, ge=1), with_genres: Optional[str] = None):
+    # Explicit Hollywood filter (English language movies)
+    return await tmdb_get("/discover/movie", {"sort_by": sort_by, "page": page, "with_genres": with_genres, "with_original_language": "en", "include_adult": "false"})
 
 
 # ── Platform Discovery ────────────────────────────────────────────────────────

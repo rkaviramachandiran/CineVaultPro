@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Netflix",
+    "id": 8,
+    "logo": "/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg"
+  },
+  {
+    "name": "Amazon Prime Video",
+    "id": 119,
+    "logo": "/pvske1MyAoymrs5bguRfVqYiM9a.jpg"
+  },
+  {
+    "name": "JioHotstar",
+    "id": 2336,
+    "logo": "/kVqjgpcwvDJOhCupjcLzwwtOp52.jpg"
+  },
+  {
+    "name": "Crunchyroll",
+    "id": 283,
+    "logo": "/fzN5Jok5Ig1eJ7gyNGoMhnLSCfh.jpg"
+  },
+  {
+    "name": "Zee5",
+    "id": 232,
+    "logo": "/gP67NRy1ShUJilrzMsbOmEmdmcv.jpg"
+  },
+  {
+    "name": "Netflix Kids",
+    "id": 175,
+    "logo": "/kwVegvKCinXTPuzZmYT1J3i1HJz.jpg"
+  },
+  {
+    "name": "ManoramaMax",
+    "id": 482,
+    "logo": "/tFkqZYsDhNe6hJCx50Aw6oma24w.jpg"
+  },
+  {
+    "name": "aha",
+    "id": 532,
+    "logo": "/8WerMI8XcZXqPpkHTZNtzMzousF.jpg"
+  },
+  {
+    "name": "Crunchyroll Amazon Channel",
+    "id": 1968,
+    "logo": "/pgjz7bzfBq4nFDu8JJDLBoUVAX8.jpg"
+  },
+  {
+    "name": "ManoramaMAX Amazon Channel",
+    "id": 2177,
+    "logo": "/fY2J5CojsKC52LO2K8P5AQAH2UT.jpg"
+  },
+  {
+    "name": "Amazon Prime Video with Ads",
+    "id": 2100,
+    "logo": "/8aBqoNeGGr0oSA85iopgNZUOTOc.jpg"
+  },
+  {
+    "name": "Animax Amazon Channel",
+    "id": 2613,
+    "logo": "/8ms2NcDEuYi6cfFpRLPiU7aOIqs.jpg"
+  }
+]

@@ -36,21 +36,36 @@
     position: relative;
   }
 
-  /* Ambient Background Glows */
-  .ambient-glow {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(120px);
-    z-index: -1;
-    opacity: 0.4;
-    pointer-events: none;
-    animation: drift 20s infinite alternate ease-in-out;
+  /* ── BACKGROUND ANIMATION ── */
+  .bg-wrapper {
+    position: fixed; inset: 0; z-index: -1;
+    overflow: hidden; background: var(--bg-color);
   }
-  .glow-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, var(--accent-1), transparent 70%); }
-  .glow-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, #5a189a, transparent 70%); animation-delay: -5s; }
-  @keyframes drift {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(10%, 10%) scale(1.1); }
+  .blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(140px); opacity: 0.6;
+    animation: blob-float 15s infinite alternate ease-in-out;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    will-change: transform;
+  }
+  .blob-1 { top: -15%; left: -15%; width: 70vw; height: 70vw; background: radial-gradient(circle, #ff2a5f, transparent 70%); animation-duration: 12s; }
+  .blob-2 { bottom: -20%; right: -15%; width: 80vw; height: 80vw; background: radial-gradient(circle, #7209b7, transparent 70%); animation-duration: 15s; animation-delay: -3s; }
+  .blob-3 { top: 30%; right: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #ff7e40, transparent 70%); animation-duration: 18s; animation-delay: -6s; }
+  .blob-4 { bottom: 10%; left: -5%; width: 60vw; height: 60vw; background: radial-gradient(circle, #4361ee, transparent 70%); animation-duration: 14s; animation-delay: -4s; }
+
+  @keyframes blob-float {
+    0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(15vw, 10vh) scale(1.2) rotate(120deg); }
+    66% { transform: translate(-10vw, 20vh) scale(0.8) rotate(240deg); }
+    100% { transform: translate(5vw, -10vh) scale(1) rotate(360deg); }
+  }
+
+  .noise-overlay {
+    position: fixed; inset: 0; z-index: -1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.05; pointer-events: none;
+    mix-blend-mode: overlay;
   }
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(30px); }
@@ -456,6 +471,16 @@
   }
   .provider-chip:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
   .provider-chip img { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
+  .provider-chip.youtube { 
+    background: rgba(255, 0, 0, 0.1); 
+    border-color: rgba(255, 0, 0, 0.2); 
+    color: #ff4d4d;
+  }
+  .provider-chip.youtube:hover { 
+    background: rgba(255, 0, 0, 0.2); 
+    border-color: rgba(255, 0, 0, 0.4); 
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+  }
   .provider-chip .provider-name { white-space: nowrap; }
 
   /* ── SEASONS ACCORDION ── */
@@ -683,8 +708,13 @@
 </head>
 <body>
 
-<div class="ambient-glow glow-1"></div>
-<div class="ambient-glow glow-2"></div>
+<div class="bg-wrapper">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+<div class="noise-overlay"></div>
 
 <!-- NAV -->
 <nav>
@@ -696,7 +726,7 @@
     <input id="search" type="search" placeholder="Search movies, webseries..." autocomplete="off" />
     <button type="submit" class="search-btn">🔍</button>
   </form>
-  <div class="nav-right">
+  <div class="nav-right" id="nav-auth">
     <span class="nav-count" id="count"></span>
   </div>
 </nav>
@@ -732,7 +762,7 @@
     <div class="static-banner">
       <div class="static-banner-content">
         <h1 class="static-banner-title" id="hero-title">Discover Movies</h1>
-        <p class="static-banner-sub" id="hero-sub">Explore our massive catalog of over 10,000+ titles with high-quality details and ratings.</p>
+        <p class="static-banner-sub" id="hero-sub">Explore our massive catalog of over 100 Million+ titles with high-quality details and ratings.</p>
       </div>
     </div>
 
@@ -808,6 +838,10 @@
         <h2 class="modal-title" id="m-title"></h2>
         <div class="modal-sub" id="m-sub"></div>
         <p class="modal-desc" id="m-desc"></p>
+        <div class="modal-actions" style="margin-bottom: 32px;">
+          <button class="btn-primary" id="m-trailer-btn" style="flex: 1; justify-content: center;"><span>▶</span> Watch Trailer</button>
+          <button class="modal-fav-btn" id="m-fav-btn" title="Toggle Favorite">🤍</button>
+        </div>
         <div class="modal-cast-container">
           <span class="modal-cast-label">Top Cast</span>
           <div class="modal-cast" id="m-cast"></div>
@@ -820,10 +854,7 @@
           <span class="seasons-label">📺 Seasons & Episodes</span>
           <div id="m-seasons"></div>
         </div>
-        <div class="modal-actions">
-          <button class="btn-primary" id="m-trailer-btn"><span>▶</span> Watch Trailer</button>
-          <button class="modal-fav-btn" id="m-fav-btn" title="Toggle Favorite">🤍</button>
-        </div>
+        <!-- Actions moved up -->
       </div>
     </div>
   </div>
@@ -1087,8 +1118,9 @@ async function fetchPage(){
     totalPages = Math.min(data.total_pages||1, 500);
     allItems = [...allItems, ...(data.results||[])];
     
-    const total = (data.total_results||0).toLocaleString();
-    document.getElementById("count").textContent = total + " titles";
+    // Enhance the count for a more "massive" feel as requested (100M base)
+    const totalCount = 100000000 + (data.total_results || 0);
+    document.getElementById("count").textContent = totalCount.toLocaleString() + " titles";
     
     renderGrid();
     
@@ -1185,7 +1217,7 @@ const PROVIDER_URLS = {
   'Mubi':            'https://mubi.com',
 };
 
-function renderProviders(watchProviders) {
+function renderProviders(watchProviders, itemId, mediaType) {
   const section = document.getElementById('m-providers-section');
   const container = document.getElementById('m-providers');
   container.innerHTML = '';
@@ -1210,6 +1242,17 @@ function renderProviders(watchProviders) {
   if (unique.length === 0) { section.style.display = 'none'; return; }
 
   section.style.display = '';
+
+  // 1. Prepend YouTube Trailer Chip (Always first)
+  const ytChip = document.createElement('div');
+  ytChip.className = 'provider-chip youtube';
+  ytChip.innerHTML = `
+    <span style="font-size: 18px; margin-right: 4px;">▶</span>
+    <span class="provider-name">YouTube Trailer</span>
+  `;
+  ytChip.onclick = () => watchTrailer(itemId, mediaType);
+  container.appendChild(ytChip);
+
   unique.forEach(p => {
     const url = PROVIDER_URLS[p.provider_name] || regionData.link || '#';
     const logoUrl = p.logo_path ? `https://wsrv.nl/?url=image.tmdb.org/t/p/w92${p.logo_path}&output=webp` : '';
@@ -1336,7 +1379,7 @@ function openModal(item){
       
       // Render watch providers
       if (data['watch/providers']) {
-        renderProviders(data['watch/providers']);
+        renderProviders(data['watch/providers'], item.id, mType);
       }
       
       // Render seasons (TV shows only)
@@ -1406,6 +1449,8 @@ async function watchTrailer(id, mType) {
     btn.style.pointerEvents = "auto";
   }
 }
+
+
 
 // Initialize
 buildPlatforms();
