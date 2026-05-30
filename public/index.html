@@ -200,63 +200,80 @@
   /* ── CONTENT ── */
   .content { flex: 1; padding: 2rem; min-width: 0; }
   
-  /* Hero Section */
+  /* Hero Carousel Redesign */
   .hero {
     border-radius: var(--radius-lg);
-    margin-bottom: 1.5rem;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid var(--glass-border);
-    min-height: 400px;
-    background: #000;
-  }
-  
-  .static-banner {
-    border-radius: var(--radius-lg);
-    background: linear-gradient(to right, rgba(255, 42, 95, 0.15), transparent), 
-                url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1200&auto=format&fit=crop') center/cover;
-    padding: 2.5rem 2rem;
     margin-bottom: 2rem;
     position: relative;
     overflow: hidden;
     border: 1px solid var(--glass-border);
-    display: flex; flex-direction: column; justify-content: center;
+    height: 480px;
+    background: #000;
   }
-  .static-banner::before {
-    content: ''; position: absolute; inset: 0;
-    background: rgba(0,0,0,0.6);
-  }
-  .static-banner-content { position: relative; z-index: 2; }
-  .static-banner-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; }
-  .static-banner-sub { font-size: 1rem; color: var(--text-secondary); max-width: 500px; }
   .hero-slides { position: absolute; inset: 0; z-index: 1; }
   .hero-slide {
     position: absolute; inset: 0;
     background-size: cover; background-position: center 20%;
-    opacity: 0; transition: opacity 0.7s ease-in-out, transform 0.7s ease-out;
-    transform: scale(1.05);
+    opacity: 0; transition: opacity 0.8s ease-in-out, transform 0.8s ease-out;
+    transform: scale(1.03);
   }
   .hero-slide.active { opacity: 1; transform: scale(1); }
   .hero-slide::after {
     content: ''; position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 40%);
+    background: linear-gradient(to top, rgba(5, 5, 5, 0.95) 0%, rgba(5, 5, 5, 0.4) 50%, rgba(5, 5, 5, 0.1) 100%),
+                linear-gradient(to right, rgba(5, 5, 5, 0.9) 0%, rgba(5, 5, 5, 0.3) 60%, transparent 100%);
     z-index: 2;
   }
   .slide-content {
-    position: absolute; bottom: 40px; left: 40px; z-index: 5;
-    color: white; opacity: 0; transform: translateY(20px);
-    transition: all 0.6s ease 0.3s;
+    position: absolute; bottom: 48px; left: 48px; z-index: 5;
+    color: white; opacity: 0; transform: translateY(30px);
+    transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+    max-width: 600px;
+    text-align: left;
   }
   .hero-slide.active .slide-content {
     opacity: 1; transform: translateY(0);
   }
+  .slide-category {
+    font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--accent-1); margin-bottom: 12px; display: inline-block;
+  }
   .slide-title {
-    font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem;
+    font-size: 2.8rem; font-weight: 800; margin-bottom: 12px;
+    line-height: 1.1; letter-spacing: -1px;
     text-shadow: 0 2px 10px rgba(0,0,0,0.5);
   }
-  .hero-content { position: relative; z-index: 5; }
-  .hero-title { font-size: 3rem; font-weight: 800; margin-bottom: 0.8rem; line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-  .hero-subtitle { font-size: 1.15rem; color: #ddd; max-width: 650px; line-height: 1.5; text-shadow: 0 1px 5px rgba(0,0,0,0.5); }
+  .slide-meta {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 16px;
+    font-size: 14px; font-weight: 600; color: #ddd;
+  }
+  .slide-rating {
+    color: #ffd700; display: flex; align-items: center; gap: 4px;
+    background: rgba(255, 215, 0, 0.15); padding: 2px 8px; border-radius: 4px;
+  }
+  .slide-desc {
+    font-size: 15px; color: var(--text-secondary); line-height: 1.5;
+    margin-bottom: 24px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .slide-actions { display: flex; gap: 14px; }
+  .slide-btn {
+    padding: 12px 24px; border-radius: 12px; font-family: var(--font);
+    font-size: 14px; font-weight: 700; cursor: pointer; transition: var(--transition);
+    display: flex; align-items: center; gap: 8px; border: none;
+  }
+  .slide-btn-primary {
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); color: white;
+  }
+  .slide-btn-primary:hover {
+    box-shadow: 0 8px 24px var(--accent-dim); transform: translateY(-2px);
+  }
+  .slide-btn-secondary {
+    background: rgba(255,255,255,0.08); color: white; border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+  }
+  .slide-btn-secondary:hover {
+    background: rgba(255,255,255,0.15); transform: translateY(-2px);
+  }
 
   .toolbar { 
     display: flex; align-items: center; justify-content: space-between; 
@@ -293,6 +310,22 @@
     position: relative;
     display: flex; flex-direction: column;
     opacity: 0;
+  }
+  .card::before {
+    content: ''; position: absolute; inset: 0;
+    border-radius: var(--radius-md); padding: 1px;
+    background: linear-gradient(135deg, transparent, transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    transition: var(--transition);
+    opacity: 0;
+    z-index: 5;
+  }
+  .card:hover::before {
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    opacity: 1;
   }
   .card:hover { 
     transform: translateY(-8px) scale(1.02); 
@@ -870,6 +903,74 @@
     .toolbar { flex-direction: column; align-items: stretch; }
     .sort-select { width: 100%; }
   }
+
+  /* Autocomplete Dropdown Styling */
+  .autocomplete-dropdown {
+    position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+    background: rgba(10, 10, 12, 0.95); backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border); border-radius: var(--radius-md);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 100;
+    max-height: 380px; overflow-y: auto; display: none;
+    padding: 8px 0;
+    transition: var(--transition);
+  }
+  .autocomplete-dropdown.open { display: block; }
+  .suggestion-item {
+    display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+    cursor: pointer; transition: var(--transition);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    text-align: left;
+  }
+  .suggestion-item:last-child { border-bottom: none; }
+  .suggestion-item:hover, .suggestion-item.focused {
+    background: rgba(255,255,255,0.06);
+  }
+  .suggestion-poster {
+    width: 36px; height: 50px; border-radius: 4px; object-fit: cover;
+    background: #222; flex-shrink: 0;
+  }
+  .suggestion-info { flex: 1; min-width: 0; }
+  .suggestion-title {
+    font-size: 14px; font-weight: 700; color: var(--text-primary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .suggestion-meta {
+    font-size: 12px; color: var(--text-secondary); margin-top: 2px;
+    display: flex; gap: 8px; align-items: center;
+  }
+  .suggestion-rating { color: #ffd700; font-weight: 600; }
+
+  /* Toast Notification system */
+  .toast-container {
+    position: fixed; bottom: 32px; right: 32px; z-index: 1000;
+    display: flex; flex-direction: column; gap: 12px; pointer-events: none;
+  }
+  .toast {
+    background: rgba(10, 10, 12, 0.9); backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); border-radius: var(--radius-md);
+    padding: 14px 24px; color: var(--text-primary); font-family: var(--font);
+    font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); pointer-events: auto;
+    animation: toast-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+               toast-out 0.3s ease 3s forwards;
+    transform-origin: bottom right;
+    will-change: transform, opacity;
+  }
+  .toast-icon { font-size: 16px; }
+  .toast.info .toast-icon { color: var(--accent-1); }
+  .toast.success .toast-icon { color: #00f5a0; }
+  .toast.error .toast-icon { color: #ff3838; }
+
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateY(40px) scale(0.85); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes toast-out {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.9) translateY(20px); }
+  }
 </style>
 </head>
 <body>
@@ -888,10 +989,13 @@
     <span class="logo-icon">▶</span>
     <span class="logo-text">CineVault Pro</span>
   </a>
-  <form class="nav-search" onsubmit="event.preventDefault(); document.getElementById('search').blur(); fetchPage();">
-    <input id="search" type="search" placeholder="Search movies, webseries..." autocomplete="off" />
-    <button type="submit" class="search-btn">🔍</button>
-  </form>
+  <div class="search-wrapper" style="position: relative; flex: 1; max-width: 500px; display: flex; align-items: center;">
+    <form class="nav-search" style="max-width: 100%; width: 100%;" onsubmit="event.preventDefault(); document.getElementById('search').blur(); closeAutocomplete(); fetchPage();">
+      <input id="search" type="search" placeholder="Search movies, webseries..." autocomplete="off" />
+      <button type="submit" class="search-btn">🔍</button>
+    </form>
+    <div class="autocomplete-dropdown" id="search-suggestions"></div>
+  </div>
   <div class="nav-right" id="nav-auth">
     <span class="nav-count" id="count"></span>
   </div>
@@ -923,13 +1027,6 @@
     
     <div class="hero" id="hero">
       <div class="hero-slides" id="hero-slides"></div>
-    </div>
-
-    <div class="static-banner">
-      <div class="static-banner-content">
-        <h1 class="static-banner-title" id="hero-title">Discover Movies</h1>
-        <p class="static-banner-sub" id="hero-sub">Explore our massive catalog of over 100 Million+ titles with high-quality details and ratings.</p>
-      </div>
     </div>
 
     <div class="platforms-bar" id="platforms-bar"></div>
@@ -974,10 +1071,13 @@
   <div class="drawer-handle"></div>
   <div class="drawer-title">Search & Filter</div>
   <div style="padding: 0 1.5rem 2rem;">
-    <form class="nav-search" style="max-width: 100%; margin-bottom: 1.5rem;" onsubmit="event.preventDefault(); document.getElementById('m-search').blur(); closeSearch(); fetchPage();">
-      <input id="m-search" type="search" placeholder="Search titles..." autocomplete="off" />
-      <button type="submit" class="search-btn">🔍</button>
-    </form>
+    <div class="search-wrapper" style="position: relative; width: 100%; margin-bottom: 1.5rem; display: flex; align-items: center;">
+      <form class="nav-search" style="max-width: 100%; width: 100%;" onsubmit="event.preventDefault(); document.getElementById('m-search').blur(); closeAutocomplete(); fetchPage();">
+        <input id="m-search" type="search" placeholder="Search titles..." autocomplete="off" />
+        <button type="submit" class="search-btn">🔍</button>
+      </form>
+      <div class="autocomplete-dropdown" id="m-search-suggestions"></div>
+    </div>
     <div class="sidebar-label" style="padding: 0; margin-bottom: 0.5rem; text-align: center;">Or Select a Genre</div>
     <div class="genre-grid" id="drawer-chips" style="justify-content: center;"></div>
   </div>
@@ -1101,10 +1201,14 @@ function isFav(id) {
 function toggleFav(item, e) {
   if (e) e.stopPropagation();
   let favs = getFavorites();
-  if (isFav(item.id)) {
+  const alreadyFav = isFav(item.id);
+  
+  if (alreadyFav) {
     favs = favs.filter(f => f.id !== item.id);
+    showToast(`Removed "${item.title || item.name}" from Favorites`, "info");
   } else {
     favs.push(item);
+    showToast(`Added "${item.title || item.name}" to Favorites`, "success");
   }
   saveFavorites(favs);
   renderGrid();
@@ -1644,22 +1748,195 @@ async function watchTrailer(id, mType) {
 // Initialize
 buildPlatforms();
 buildGenres();
-// ── Hero Slider ──
+initAutocomplete();
+
+// ── Toast Notifications ──
+function showToast(message, type = "info") {
+  let container = document.getElementById("toast-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "toast-container";
+    container.className = "toast-container";
+    document.body.appendChild(container);
+  }
+  
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  
+  let icon = "🔔";
+  if (type === "success") icon = "✅";
+  if (type === "error") icon = "❌";
+  if (type === "info") icon = "❤️";
+  
+  toast.innerHTML = `
+    <span class="toast-icon">${icon}</span>
+    <span>${message}</span>
+  `;
+  
+  container.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.remove();
+  }, 3300);
+}
+
+// ── Search Autocomplete Logic ──
+let focusedIndex = -1;
+let currentSuggestions = [];
+
+function initAutocomplete() {
+  const sInput = document.getElementById("search");
+  const mInput = document.getElementById("m-search");
+  
+  setupAutocompleteFor(sInput, "search-suggestions");
+  setupAutocompleteFor(mInput, "m-search-suggestions");
+  
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".search-wrapper")) {
+      closeAutocomplete();
+    }
+  });
+}
+
+function closeAutocomplete() {
+  document.querySelectorAll(".autocomplete-dropdown").forEach(d => {
+    d.classList.remove("open");
+    d.innerHTML = "";
+  });
+  focusedIndex = -1;
+  currentSuggestions = [];
+}
+
+function setupAutocompleteFor(inputEl, dropdownId) {
+  if (!inputEl) return;
+  const dropdown = document.getElementById(dropdownId);
+  
+  inputEl.addEventListener("input", async (e) => {
+    const val = e.target.value.trim();
+    if (val.length < 2) {
+      dropdown.classList.remove("open");
+      dropdown.innerHTML = "";
+      return;
+    }
+    
+    const sType = isTV() ? "tv" : "movie";
+    const url = `${API}/${mode}/search?query=${encodeURIComponent(val)}&page=1`;
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Search suggestions failed");
+      const data = await res.json();
+      currentSuggestions = (data.results || []).slice(0, 5);
+      focusedIndex = -1;
+      
+      if (currentSuggestions.length > 0) {
+        renderSuggestions(dropdown, currentSuggestions);
+        dropdown.classList.add("open");
+      } else {
+        dropdown.classList.remove("open");
+        dropdown.innerHTML = "";
+      }
+    } catch {
+      dropdown.classList.remove("open");
+    }
+  });
+  
+  inputEl.addEventListener("keydown", (e) => {
+    const items = dropdown.querySelectorAll(".suggestion-item");
+    if (!items.length) return;
+    
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      focusedIndex = (focusedIndex + 1) % items.length;
+      updateFocusedItem(items);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      focusedIndex = (focusedIndex - 1 + items.length) % items.length;
+      updateFocusedItem(items);
+    } else if (e.key === "Enter") {
+      if (focusedIndex >= 0 && focusedIndex < currentSuggestions.length) {
+        e.preventDefault();
+        openModal(currentSuggestions[focusedIndex]);
+        closeAutocomplete();
+        inputEl.blur();
+      }
+    } else if (e.key === "Escape") {
+      closeAutocomplete();
+      inputEl.blur();
+    }
+  });
+}
+
+function updateFocusedItem(items) {
+  items.forEach((item, index) => {
+    item.classList.toggle("focused", index === focusedIndex);
+    if (index === focusedIndex) {
+      item.scrollIntoView({ block: "nearest" });
+    }
+  });
+}
+
+function renderSuggestions(dropdown, list) {
+  dropdown.innerHTML = "";
+  list.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "suggestion-item";
+    
+    const title = item.title || item.name || "Untitled";
+    const date = (item.release_date || item.first_air_date || "").slice(0,4) || "—";
+    const rating = item.vote_average ? item.vote_average.toFixed(1) : "NR";
+    const imgUrl = purl(item.poster_path);
+    
+    div.innerHTML = `
+      ${imgUrl ? `<img class="suggestion-poster" src="${imgUrl}" alt="${title}">` : '<div class="suggestion-poster" style="background:#222;display:flex;align-items:center;justify-content:center;font-size:10px;color:#666">No Img</div>'}
+      <div class="suggestion-info">
+        <div class="suggestion-title">${title}</div>
+        <div class="suggestion-meta">
+          <span>📅 ${date}</span>
+          <span class="suggestion-rating">★ ${rating}</span>
+        </div>
+      </div>
+    `;
+    
+    div.onclick = () => {
+      openModal(item);
+      closeAutocomplete();
+    };
+    
+    dropdown.appendChild(div);
+  });
+}
+
+// ── Hero Slider Redesign ──
 let heroItems = [];
 let heroIndex = 0;
 let heroTimer = null;
 
+async function openModalById(id, mType) {
+  try {
+    const res = await fetch(`${API}/${mType}/${id}`);
+    if (!res.ok) throw new Error("Title not found");
+    const data = await res.json();
+    openModal(data);
+  } catch (e) {
+    showToast("Failed to load title details.", "error");
+  }
+}
+
+function toggleFavHero(index) {
+  const item = heroItems[index];
+  if (!item) return;
+  toggleFav(item);
+}
+
 async function initHeroSlider() {
   try {
-    // Fetch from a random page of popular items to ensure variety on refresh
     const randomPage = Math.floor(Math.random() * 5) + 1; 
     const res = await fetch(`${API}/movies/discover?sort_by=popularity.desc&page=${randomPage}`);
     const data = await res.json();
     
-    // Shuffle the results and take the first 20 for a long loop
     heroItems = (data.results || [])
       .sort(() => Math.random() - 0.5)
-      .slice(0, 20);
+      .slice(0, 10);
       
     renderHeroSlider();
     startHeroSlider();
@@ -1677,21 +1954,38 @@ function renderHeroSlider() {
     slide.className = `hero-slide ${i === 0 ? 'active' : ''}`;
     slide.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${item.backdrop_path})`;
     
+    const title = item.title || item.name;
+    const desc = item.overview || "Explore CineVault Pro details, cast lists, and watch provider platforms.";
+    const rating = item.vote_average ? item.vote_average.toFixed(1) : "NR";
+    const date = (item.release_date || item.first_air_date || "").slice(0, 4) || "—";
+    
     const content = document.createElement("div");
     content.className = "slide-content";
-    content.innerHTML = `<h2 class="slide-title">${item.title || item.name}</h2>`;
+    content.innerHTML = `
+      <span class="slide-category">🔥 Trending Now</span>
+      <h2 class="slide-title">${title}</h2>
+      <div class="slide-meta">
+        <span>📅 ${date}</span>
+        <span class="slide-rating">★ ${rating}</span>
+      </div>
+      <p class="slide-desc">${desc}</p>
+      <div class="slide-actions">
+        <button class="slide-btn slide-btn-primary" onclick="openModalById(${item.id}, 'movie')">▶ More Info</button>
+        <button class="slide-btn slide-btn-secondary" onclick="toggleFavHero(${i})">❤️ Favorite</button>
+      </div>
+    `;
     slide.appendChild(content);
-    
     container.appendChild(slide);
   });
 }
 
 function startHeroSlider() {
   if (heroTimer) clearInterval(heroTimer);
-  heroTimer = setInterval(nextHero, 5000);
+  heroTimer = setInterval(nextHero, 8000);
 }
 
 function nextHero() {
+  if (!heroItems.length) return;
   heroIndex = (heroIndex + 1) % heroItems.length;
   updateHeroUI();
 }
@@ -1707,15 +2001,6 @@ function updateHeroUI() {
   if(!slides.length) return;
 
   slides.forEach((s, i) => s.classList.toggle("active", i === heroIndex));
-  
-  const item = heroItems[heroIndex];
-  const q = document.getElementById("search").value.trim();
-  
-  // Update text only if not searching
-  if (!q) {
-    // We keep the static banner for the mode, but maybe show movie title in a small overlay on the slide if needed.
-    // For now, let's keep the static banner as requested.
-  }
 }
 
 // Initial fetch
