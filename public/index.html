@@ -400,41 +400,139 @@
   /* ── MODAL ── */
   .modal-bg {
     display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 200;
-    align-items: center; justify-content: center; padding: 1rem;
-    opacity: 0; transition: opacity 0.3s ease;
+    background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 200;
+    align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.35s ease;
   }
   .modal-bg.open { display: flex; opacity: 1; }
+  
   .modal {
-    background: #0a0a0c; border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg); max-width: 950px; width: 100%; overflow: hidden;
-    transform: translateY(30px) scale(0.95); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 30px 70px rgba(0,0,0,0.9);
-    position: relative;
-    max-height: 90vh;
+    background: #050507;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
     display: flex;
     flex-direction: column;
-    opacity: 0;
-  }
-  .modal-bg.open .modal { transform: translateY(0) scale(1); opacity: 1; }
-  
-  .modal-close {
-    position: absolute; top: 16px; right: 16px;
-    width: 36px; height: 36px; border-radius: 50%;
-    background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border);
-    color: white; font-size: 18px; display: flex; align-items: center; justify-content: center;
-    cursor: pointer; z-index: 10; transition: var(--transition);
-  }
-  .modal-close:hover { background: var(--accent-1); transform: rotate(90deg); }
-
-  .modal-inner { display: flex; flex-direction: row; flex: 1; overflow: hidden; }
-  .modal-poster-wrap { 
-    width: 300px; flex-shrink: 0; 
-    background: rgba(0,0,0,0.2); overflow: hidden;
+    overflow: hidden;
     position: relative;
+    transform: translateY(100vh);
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .modal-poster { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .modal-info { padding: 40px; flex: 1; display: flex; flex-direction: column; justify-content: flex-start; overflow-y: auto; }
+  .modal-bg.open .modal {
+    transform: translateY(0);
+  }
+  
+  /* Header styling */
+  .modal-header {
+    height: 64px;
+    background: rgba(10, 10, 12, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 10;
+    flex-shrink: 0;
+  }
+  .modal-back-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+  }
+  .modal-back-btn:hover {
+    color: var(--text-primary);
+    transform: translateX(-4px);
+  }
+  .modal-header-title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .modal-close-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: white;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .modal-close-btn:hover {
+    background: var(--accent-1);
+    transform: rotate(90deg);
+  }
+
+  /* Split layout */
+  .split-layout {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 64px);
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .modal-left-details {
+    width: 58%;
+    height: 100%;
+    overflow-y: auto;
+    border-right: 1px solid var(--glass-border);
+    background: #08080a;
+    display: flex;
+    flex-direction: column;
+  }
+  .modal-left-details::-webkit-scrollbar {
+    width: 6px;
+  }
+  .modal-left-details::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+  }
+  
+  /* Left Column elements */
+  .details-poster-wrap {
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid var(--glass-border);
+    flex-shrink: 0;
+  }
+  .details-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .details-poster-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #08080a 0%, transparent 60%);
+  }
+
+  .details-text-pane {
+    padding: 30px;
+  }
+  
   .modal-title { font-size: 32px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; line-height: 1.1; }
   .modal-sub { font-size: 15px; color: var(--text-secondary); margin-bottom: 24px; font-weight: 500; display: flex; gap: 12px; align-items: center; }
   .modal-desc { font-size: 16px; color: #ddd; line-height: 1.6; margin-bottom: 24px; }
@@ -457,6 +555,80 @@
     border: 1px solid rgba(255,255,255,0.1); 
   }
   .modal-actions { display: flex; gap: 16px; margin-top: auto; }
+
+  .modal-right-trailer {
+    width: 42%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .trailer-player-container {
+    width: 100%;
+    aspect-ratio: 16/9;
+    position: relative;
+    max-height: 100%;
+  }
+  .trailer-player-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* No trailer fallback */
+  .no-trailer-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0f0f12 0%, #050505 100%);
+    padding: 24px;
+    text-align: center;
+  }
+  .fallback-content {
+    max-width: 400px;
+  }
+  .fallback-icon {
+    font-size: 64px;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .fallback-content h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+  .fallback-content p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 1024px) {
+    .split-layout {
+      flex-direction: column-reverse; /* Put trailer on top, details on bottom */
+      overflow-y: auto;
+      height: calc(100vh - 64px);
+    }
+    .modal-left-details {
+      width: 100%;
+      height: auto;
+      overflow-y: visible;
+      border-right: none;
+    }
+    .modal-right-trailer {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16/9;
+      flex-shrink: 0;
+    }
+    .details-poster-wrap {
+      max-height: 250px;
+    }
+  }
 
   /* ── WATCH PROVIDERS ── */
   .providers-section { margin-bottom: 24px; }
@@ -671,12 +843,7 @@
   .drawer-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 1.5rem; text-align: center; }
 
   /* ── RESPONSIVE ── */
-  @media (max-width: 1024px) {
-    .modal-inner { flex-direction: column; overflow-y: auto; }
-    .modal-poster-wrap { width: 100%; height: 300px; flex-shrink: 0; }
-    .modal-info { padding: 24px; overflow-y: visible; }
-    .modal-title { font-size: 24px; }
-  }
+
   @media (max-width: 768px) {
     nav { padding: 0 1rem; height: 72px; justify-content: space-between; gap: 1rem; }
     .logo-text { display: none; }
@@ -696,8 +863,7 @@
     .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
     .card-title { font-size: 13px; }
     
-    .modal { margin: 10px; max-height: 90vh; overflow-y: auto; }
-    .modal-poster-wrap { height: 250px; }
+
   }
   @media (max-width: 480px) {
     .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -828,33 +994,51 @@
 <!-- MODAL -->
 <div class="modal-bg" id="modal" onclick="closeModal(event)">
   <div class="modal">
-    <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">✕</button>
-    <div class="modal-inner">
-      <div class="modal-poster-wrap">
-        <img class="modal-poster" id="m-poster" src="" alt="" />
+    <div class="modal-header">
+      <button class="modal-back-btn" onclick="closeModalDirect()"><span class="back-icon">←</span> Back to Browse</button>
+      <div class="modal-header-title">Now Playing</div>
+      <button class="modal-close-btn" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="split-layout">
+      <!-- Left Column: Poster Image and Details (Scrollable) -->
+      <div class="modal-left-details">
+        <div class="details-poster-wrap">
+          <img class="details-poster" id="m-poster" src="" alt="" />
+        </div>
+        <div class="details-text-pane">
+          <div id="m-badges" class="modal-badges"></div>
+          <h2 class="modal-title" id="m-title"></h2>
+          <div class="modal-sub" id="m-sub"></div>
+          <p class="modal-desc" id="m-desc"></p>
+          <div class="modal-actions" style="margin-bottom: 32px;">
+            <button class="modal-fav-btn" id="m-fav-btn" title="Toggle Favorite" style="width: 100%; border-radius: var(--radius-md); gap: 8px; justify-content: center;">🤍 Add to Favorites</button>
+          </div>
+          <div class="modal-cast-container">
+            <span class="modal-cast-label">Top Cast</span>
+            <div class="modal-cast" id="m-cast"></div>
+          </div>
+          <div class="providers-section" id="m-providers-section" style="display:none">
+            <span class="providers-label">📡 Where to Watch</span>
+            <div class="providers-list" id="m-providers"></div>
+          </div>
+          <div class="seasons-section" id="m-seasons-section" style="display:none">
+            <span class="seasons-label">📺 Seasons & Episodes</span>
+            <div id="m-seasons"></div>
+          </div>
+        </div>
       </div>
-      <div class="modal-info">
-        <div id="m-badges" class="modal-badges"></div>
-        <h2 class="modal-title" id="m-title"></h2>
-        <div class="modal-sub" id="m-sub"></div>
-        <p class="modal-desc" id="m-desc"></p>
-        <div class="modal-actions" style="margin-bottom: 32px;">
-          <button class="btn-primary" id="m-trailer-btn" style="flex: 1; justify-content: center;"><span>▶</span> Watch Trailer</button>
-          <button class="modal-fav-btn" id="m-fav-btn" title="Toggle Favorite">🤍</button>
+      <!-- Right Column: Auto-loading Video Player -->
+      <div class="modal-right-trailer">
+        <div class="trailer-player-container">
+          <iframe id="detail-trailer-iframe" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <div class="no-trailer-fallback" id="m-no-trailer-fallback" style="display:none">
+            <div class="fallback-content">
+              <span class="fallback-icon">🎬</span>
+              <h3>Trailer Not Available</h3>
+              <p>We couldn't find an official YouTube trailer for this title.</p>
+            </div>
+          </div>
         </div>
-        <div class="modal-cast-container">
-          <span class="modal-cast-label">Top Cast</span>
-          <div class="modal-cast" id="m-cast"></div>
-        </div>
-        <div class="providers-section" id="m-providers-section" style="display:none">
-          <span class="providers-label">📡 Where to Watch</span>
-          <div class="providers-list" id="m-providers"></div>
-        </div>
-        <div class="seasons-section" id="m-seasons-section" style="display:none">
-          <span class="seasons-label">📺 Seasons & Episodes</span>
-          <div id="m-seasons"></div>
-        </div>
-        <!-- Actions moved up -->
       </div>
     </div>
   </div>
@@ -1391,9 +1575,6 @@ function openModal(item){
       mCast.innerHTML = `<span style="color: var(--text-secondary); font-size: 14px;">Failed to load cast.</span>`;
     });
   
-  const mTrailerBtn = document.getElementById("m-trailer-btn");
-  mTrailerBtn.onclick = () => watchTrailer(item.id, mType);
-  
   const mFavBtn = document.getElementById("m-fav-btn");
   mFavBtn.dataset.id = item.id;
   mFavBtn.onclick = (e) => toggleFav(item, e);
@@ -1403,15 +1584,24 @@ function openModal(item){
   document.getElementById("m-badges").innerHTML = badgeHTML;
   
   const img = document.getElementById("m-poster");
-  const u = purl(item.poster_path);
-  img.src = u || "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="; 
+  const backdropUrl = item.backdrop_path ? `https://image.tmdb.org/t/p/w780${item.backdrop_path}` : purl(item.poster_path);
+  img.src = backdropUrl || "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="; 
+  
+  // Auto load and play trailer in the right side
+  watchTrailer(item.id, mType);
   
   document.getElementById("modal").classList.add("open");
 }
 
+function closeModalDirect(){
+  document.getElementById("modal").classList.remove("open");
+  const iframe = document.getElementById("detail-trailer-iframe");
+  if (iframe) iframe.src = "";
+}
+
 function closeModal(e){ 
   if(e.target === document.getElementById("modal")) {
-    document.getElementById("modal").classList.remove("open"); 
+    closeModalDirect();
   }
 }
 
@@ -1425,28 +1615,27 @@ function closeTrailerModal(e){
 
 async function watchTrailer(id, mType) {
   mType = mType || (isTV() ? "tv" : "movie");
-  const btn = document.getElementById("m-trailer-btn");
-  const origText = btn.innerHTML;
-  btn.innerHTML = "<span>⏳</span> Loading...";
-  btn.style.pointerEvents = "none";
+  const iframe = document.getElementById("detail-trailer-iframe");
+  const fallback = document.getElementById("m-no-trailer-fallback");
+  
+  if (!iframe) return;
+  
+  iframe.style.display = "none";
+  iframe.src = "";
+  if (fallback) fallback.style.display = "none";
   
   try {
     const res = await fetch(`${API}/trailer/${mType}/${id}`);
     if (!res.ok) throw new Error("Trailer not found");
     const data = await res.json();
     if (data.youtube_key) {
-      const tModal = document.getElementById("trailer-modal");
-      const tIframe = document.getElementById("trailer-iframe");
-      tIframe.src = `https://www.youtube.com/embed/${data.youtube_key}?autoplay=1`;
-      tModal.classList.add("open");
+      iframe.src = `https://www.youtube.com/embed/${data.youtube_key}?autoplay=1&mute=1`;
+      iframe.style.display = "block";
     } else {
-      alert("Trailer not available");
+      throw new Error("No key found");
     }
   } catch (err) {
-    alert("Could not find a trailer for this title.");
-  } finally {
-    btn.innerHTML = origText;
-    btn.style.pointerEvents = "auto";
+    if (fallback) fallback.style.display = "flex";
   }
 }
 
