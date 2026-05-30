@@ -216,8 +216,13 @@
     background-size: cover; background-position: center 20%;
     opacity: 0; transition: opacity 0.8s ease-in-out, transform 0.8s ease-out;
     transform: scale(1.03);
+    pointer-events: none;
   }
-  .hero-slide.active { opacity: 1; transform: scale(1); }
+  .hero-slide.active { 
+    opacity: 1; 
+    transform: scale(1); 
+    pointer-events: auto;
+  }
   .hero-slide::after {
     content: ''; position: absolute; inset: 0;
     background: linear-gradient(to top, rgba(5, 5, 5, 0.95) 0%, rgba(5, 5, 5, 0.4) 50%, rgba(5, 5, 5, 0.1) 100%),
@@ -1970,7 +1975,7 @@ function renderHeroSlider() {
       </div>
       <p class="slide-desc">${desc}</p>
       <div class="slide-actions">
-        <button class="slide-btn slide-btn-primary" onclick="openModalById(${item.id}, 'movie')">▶ More Info</button>
+        <button class="slide-btn slide-btn-primary" onclick="openModalById(${item.id}, '${item.title ? 'movie' : 'tv'}')">▶ More Info</button>
         <button class="slide-btn slide-btn-secondary" onclick="toggleFavHero(${i})">❤️ Favorite</button>
       </div>
     `;
